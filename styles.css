@@ -1,0 +1,354 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand&display=swap');
+
+:root{
+    --lightPurple: rgb(231, 222, 240);
+    --darkPurple: rgb(55, 5, 55);
+    --buttonPurple: rgb(205, 179, 230);
+    --midPurple: rgb(185, 146, 221);
+    --shadow: 2px 2px 1px rgb(197, 195, 195);
+    --background: rgb(241, 236, 245);
+    --lightest: rgb(247, 243, 251);
+}
+
+body{
+    margin: 0;
+    background-color: var(--background);
+    font-family: 'Quicksand', sans-serif;
+}
+
+header{
+    background-image: url("./images/music-notes.png");
+    background-repeat: no-repeat;
+    background-size: 50px;
+    background-position: 15px;
+    background-color: var(--lightPurple);
+    margin: auto;
+    overflow: hidden;
+    padding: 5px;
+    padding-right: 15px;
+    height: 65px;
+    position: sticky;
+    top: 0;
+}
+
+header b{
+    position: absolute;
+    font-size: 30px;
+    font-weight: 900;
+    margin: 70px;
+    margin-top: 10px;
+    color: var(--darkPurple);
+}
+header b:hover{
+    cursor: pointer;
+}
+
+.bigButton{
+    width: 80px;
+    height: 45px;
+    font-size: 16px;
+    font-weight: 300;
+    text-align: center;
+    float: right;
+    margin: 10px 15px 10px 0;
+    padding: 10px;
+    border-radius: 3px;
+    background-color: var(--lightest);
+    color: var(--midPurple);
+    border: 1.5px solid var(--midPurple);
+}
+
+.bigButton:hover{
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    background-color: var(--midPurple);
+    color: var(--lightest);
+    border: 1.5px solid var(--lightest);
+}
+
+.credits{
+    position: absolute;
+    top: 70px;
+    right: 3px;
+    background-color: var(--lightest);
+    border: 1px solid var(--midPurple);
+    box-shadow: var(--shadow);
+    padding: 10px;
+    width: 315px;
+    z-index: 100;
+}
+.credits a:link, .credits a:visited, .credits p{
+    display: block;
+    margin: 10px;
+    color: var(--midPurple);
+}
+
+footer{
+    padding-left: 20px;
+    color: var(--darkPurple);
+}
+
+.viewPort{
+    margin: auto;
+    margin-top: 30px;
+    width: 97vw;
+    height: calc(100vh - 150px);
+    color: var(--darkPurple);
+}
+
+#browseView ul{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+#browseView ul li{
+    margin-bottom: 5px;
+}
+#browseView input[type=text]{
+    border: 1px solid var(--midPurple);
+    color: var(--midPurple);
+    font-size: 20px;
+    text-align: center;
+    width: 80px;
+    margin-left: 10px;
+}
+#browseView input[type=text][disabled]{
+    border: 0;
+}
+#browseView ul input[type=text]{
+    width: 70%;
+}
+#browseView ul select{
+    width: 71.5%;
+    font-size: 15px;
+    background-color: white;
+    color: var(--midPurple);
+    margin-left: 2px;
+}
+#browseView ul select[disabled]{
+    opacity: 30%;
+}
+#browseView ul label{
+    margin-left: 10px;
+    margin-right: 20px;
+}
+#browseView ul label[for="artist"]{
+    margin-right: 21px;
+}
+#browseView ul label[for="genre"]{
+    margin-right: 16px;
+}
+
+.selectionContainer{
+    width: 170px;
+    float: right;
+    margin-top: 15px;
+}
+.selectionContainer input{
+    margin-right: 10px;
+}
+.selectionContainer label:nth-of-type(1){
+    margin-right: 24px;
+}
+
+.radio{
+    border: 1px solid var(--midPurple);
+    background-color: var(--lightest);
+    border-radius: 50%;
+    width: 15px;
+    height: 15px;
+    display: inline;
+    vertical-align: 2px;
+}
+.radio:hover{
+    cursor: pointer;
+    background-color: var(--midPurple);
+    border-color: var(--lightPurple);
+    opacity: 50%;
+}
+#year .radio, #popularity .radio{
+    vertical-align: top;
+    margin-top: 5px;
+}
+input.year, input.popularity{
+    margin: 3px 0;
+}
+.selected{
+    background-color: var(--midPurple);
+    border: 1px solid var(--lightPurple);
+}
+
+.songSearch, .playlistList, .songInfo, .radarChart{
+    background-color: var(--lightest);
+    width: 30vw;
+    min-width: 360px;
+    padding: 20px;
+    margin: 2px;
+    border-radius: 5px;
+    height: calc(100vh - 200px);
+    display: inline-block;
+    vertical-align: middle;
+    overflow: scroll;
+}
+.songSearch h1, .playlistList h1{
+    text-align: center;
+    font-weight: 900;
+    font-size: 35px;
+}
+.songSearch h3{
+    display: inline;
+    vertical-align: top;
+    margin-left: 10px;
+}
+.songSearchSection{
+    border: 2px solid white;
+    border-radius: 8px;
+    margin: 15px;
+    padding: 10px;
+    height: 90px;
+}
+tr.labels{
+    height: 25px;
+    padding-top: 4px;
+    background-color: var(--midPurple);
+    top: -2px;
+}
+table{
+    display: inline-block;
+    width: calc(60vw + 40px);
+    height: calc(100vh - 160px);
+    border: 1px solid var(--midPurple);
+    background-color: var(--lightest);
+    padding: 0;
+    vertical-align: middle;
+    border-radius: 3px;
+}
+table tr{
+    width: calc(60vw + 40px);
+    display: flex;
+    justify-content: space-evenly;
+    position: relative;
+    left: -2px;
+}
+#playlistView table, #playlistView tr{
+    width: 67vw;;
+}
+td, th{
+    width: 20%;
+}
+td.info{
+    width: 80%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+td.info:first-child{
+    margin-top: -12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+td.info:nth-child(2){
+    width: 10%;
+}
+
+.stripe{
+    width: 100%;
+    min-height: 25px;
+    text-align: center;
+}
+.stripe ul{
+    display: flex;
+}
+.stripe li{
+    margin-left: 100px;
+}
+.darkStripe{
+    background-color: var(--lightPurple);
+}
+
+
+.viewPort .bigButton{
+    float: none;
+}
+.buttonContainer{
+    display: flex;
+    justify-content: center;
+}
+
+.playlistList{
+    padding-left: 0;
+    padding-right: 40px;
+    width: 20vw;
+    min-width: 0;
+    background-color: var(--lightPurple);
+    border: 1px solid var(--buttonPurple);
+    margin: 0 30px;
+}
+.playlistList h1{
+    width: calc(100% - 2px);
+    background-color: var(--lightPurple);
+    padding: 10px 20px;
+    position: sticky;
+    margin-top: -20px;
+    margin-bottom: -10px;
+    top: -20px;
+    border-bottom: 1px solid var(--buttonPurple);
+}
+.playlistList ul{
+    list-style: none;
+    font-size: 20px;
+}
+.playlistList li{
+    padding: 5px;
+    text-align: center;
+}
+.playlistList li:hover{
+    color: var(--midPurple);
+    cursor: pointer;
+}
+
+
+#singleView{
+    display: flex;
+    justify-content: center;
+}
+.songInfo{
+    width: 30%;
+    margin: 0 15px;
+    display: flex;
+}
+.innerSongInfo{
+    width: 95%;
+    height: 98%;
+    margin: auto;
+    border: 2px solid white;
+    border-radius: 6px;
+    padding: 0;
+    text-align: center;
+}
+.songInfo ul{
+    list-style: none;
+    text-align: left;
+}
+.radarChart{
+    width: 55%;
+    height: calc(100vh - 160px);
+    margin: 0 15px;
+    padding: 0;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+canvas{
+    padding-top: 20px;
+}
+
+
+.hide{
+    display: none;
+}
+#singleView.hide{
+    display: none;
+}

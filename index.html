@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music App</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="artists.json"></script>
+    <script src="genres.json"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js" integrity="sha512-ElRFoEQdI5Ht6kZvyzXhYG9NqjtkmlkfYk0wr6wHxU9JEHakS7UJZNeml5ALk+8IKlU6jDgMabC3vkumRokgJA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="assign2.js"></script>
+</head>
+<body>
+    <header>
+        <b>My Music</b>
+        <button class="bigButton" id="credits">Credits</button>
+        <button class="bigButton">Close</button>
+    </header>
+
+    <div class="credits hide">
+        <p>Author: Clare Dufresne</p>
+        <a href="#">github page</a>
+        <a href="https://www.flaticon.com/free-icons/music" title="music icons">Music icon created by Freepik - Flaticon</a>
+    </div>
+
+    <div id="browseView" class="viewPort">
+        <div class="songSearch">
+            <h1>Song Search</h1>
+            <div class="songSearchSection">
+                <ul>
+                    <li><button class="radio Title"></button><label>Title</label><input type="text" class = "Title" disabled></li>
+                    <li><button class="radio Artist"></button><label for="artist">Artist</label><select class="Artist" disabled></select></li>
+                    <li><button class="radio Genre"></button><label for="genre">Genre</label><select class = "Genre" disabled></select></li>
+                </ul>
+            </div>
+            <div id="year" class="songSearchSection">
+                <button class="radio year"></button>
+                <h3>Year</h3>
+                <div class="selectionContainer">
+                    <label>Less</label><input type="text" class="year" disabled>
+                    <label>Greater</label><input type="text" class="year" disabled>
+                </div>
+            </div>
+            <div id="popularity" class="songSearchSection">
+                <button class="radio popularity"></button>
+                <h3>Popularity</h3>
+                <div class="selectionContainer">
+                    <label>Less</label><input type="text" class="popularity" disabled>
+                    <label>Greater</label><input type="text" class="popularity" disabled>
+                </div>
+            </div>
+            <div class="buttonContainer">
+                <button class="bigButton" id="clear">Clear</button>
+                <button class="bigButton">Search</button>
+            </div>
+        </div>
+        <table>
+            <tr class="labels">
+                <th>Title</th>
+                <th>Artist</th>
+                <th>Year</th>
+                <th>Genre</th>
+                <th>Popularity</th>
+            </tr>
+            <tr class="stripe">
+                <td>Happiness</td>
+                <td>The 1975</td>
+                <td>2022</td>
+                <td>Indie</td>
+                <td>75</td>
+            </tr>
+            <tr class="stripe darkStripe">
+                <td>Betty</td>
+                <td>Taylor Swift</td>
+                <td>2019</td>
+                <td>Pop</td>
+                <td>97</td>
+            </tr>
+            <tr class="stripe"></tr>
+            <tr class="stripe darkStripe"></tr>
+            <tr class="stripe"></tr>
+            <tr class="stripe darkStripe"></tr>
+            <tr class="stripe"></tr>
+            <tr class="stripe darkStripe"></tr>
+            <tr class="stripe"></tr>
+            <tr class="stripe darkStripe"></tr>
+            <tr class="stripe"></tr>
+            <tr class="stripe darkStripe"></tr>
+            <tr class="stripe"></tr>
+        </table>
+    </div>
+
+    <div id="singleView" class="viewPort">
+        <div class="songInfo">
+            <div class="innerSongInfo">
+                <h1>Song Info</h1>
+                <ul>
+                    <li><b>Title:</b> title</li>
+                    <li><b>Artist:</b> artist</li>
+                    <li><b>Type:</b> type</li>
+                    <li><b>Genre:</b> genre</li>
+                    <li><b>Year:</b> year</li>
+                    <li><b>Duration:</b> 0:00</li>
+                </ul>
+                <h3>Analysis Data:</h3>
+                <ul>
+                    <li><b>BMP:</b> 00</li>
+                    <li><b>Energy:</b> 00</li>
+                    <li><b>Danceability:</b> 00</li>
+                    <li><b>Liveness:</b> 00</li>
+                    <li><b>Valence:</b> 00</li>
+                    <li><b>Acousticness:</b> 00</li>
+                    <li><b>Speechiness:</b> 00</li>
+                    <li><b>Popularity:</b> 00</li>
+                </ul>
+            </div>
+        </div>
+        <div class="radarChart">
+            <canvas id="radar" width="625" height="625"></canvas>
+        </div>
+    </div>
+
+    <div id="playlistView" class="viewPort">
+        <div class="playlistList">
+            <h1>Playlists</h1>
+            <ul>
+                <li>playlist</li>
+                <li>playlist</li>
+                <li>chill playlist</li>
+                <li>happy playlist</li>
+                <li>super fun playlist</li>
+                <li>playlist</li>
+                <li>playlist</li>
+                <li>chill playlist</li>
+                <li>happy playlist</li>
+                <li>super fun playlist</li>
+                <li>playlist</li>
+                <li>playlist</li>
+                <li>chill playlist</li>
+                <li>happy playlist</li>
+                <li>super fun playlist</li>
+                <li>playlist</li>
+                <li>playlist</li>
+                <li>chill playlist</li>
+                <li>happy playlist</li>
+                <li>super fun playlist</li>
+                <li>playlist</li>
+                <li>playlist</li>
+                <li>chill playlist</li>
+                <li>happy playlist</li>
+                <li>super fun playlist</li>
+                <li>playlist</li>
+                <li>playlist</li>
+                <li>chill playlist</li>
+                <li>happy playlist</li>
+                <li>super fun playlist</li>
+            </ul>
+        </div>
+        <table>
+            <td class="info"><h1>Playlist Name</h1> <p>Songs: 00 Popularity: 00</p></td>
+            <td class="info"><button class="bigButton">Delete</button></td>
+            <tr class="labels">
+                <th>Title</th>
+                <th>Artist</th>
+                <th>Year</th>
+                <th>Genre</th>
+                <th>Popularity</th>
+            </tr>
+            <tr class="stripe">
+                <td>Happiness</td>
+                <td>The 1975</td>
+                <td>2022</td>
+                <td>Indie</td>
+                <td>75</td>
+            </tr>
+            <tr class="stripe darkStripe">
+                <td>Betty</td>
+                <td>Taylor Swift</td>
+                <td>2019</td>
+                <td>Pop</td>
+                <td>97</td>
+            </tr>
+            <tr class="stripe"></tr>
+            <tr class="stripe darkStripe"></tr>
+            <tr class="stripe"></tr>
+            <tr class="stripe darkStripe"></tr>
+            <tr class="stripe"></tr>
+            <tr class="stripe darkStripe"></tr>
+            <tr class="stripe"></tr>
+            <tr class="stripe darkStripe"></tr>
+            <tr class="stripe"></tr>
+            <tr class="stripe darkStripe"></tr>
+            <tr class="stripe"></tr>
+        </table>
+    </div>
+
+    <footer>
+        <p>Copyright &copy; 2022 My Music</p>
+    </footer>
+</body>
+</html>
