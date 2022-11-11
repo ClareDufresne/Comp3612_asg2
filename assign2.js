@@ -195,8 +195,16 @@ document.addEventListener("DOMContentLoaded", ()=>{
    let playlistView = document.querySelector("#playlistView");
 
    playlistButton.addEventListener("click", function(){
-      browseView.classList.add("hide");
-      playlistView.classList.remove("hide");
+      browseView.classList.add("fade");
+      setTimeout(function(){
+         browseView.classList.add("hide");
+         browseView.classList.remove("fade");
+         playlistView.classList.add("fadeIn");
+         playlistView.classList.remove("hide");
+         setTimeout(function(){
+            playlistView.classList.remove("fadeIn");
+         }, 500);
+      }, 300);
       playlistButton.classList.add("hide");
       closeButton.classList.remove("hide");
 
@@ -205,9 +213,20 @@ document.addEventListener("DOMContentLoaded", ()=>{
    });
 
    closeButton.addEventListener("click", function(){
-      playlistView.classList.add("hide");
-      singleView.classList.add("hide");
-      browseView.classList.remove("hide");
+      //works regardless of which viewport is currently visible
+      playlistView.classList.add("fade");
+      singleView.classList.add("fade");
+      setTimeout(function(){
+         playlistView.classList.add("hide");
+         playlistView.classList.remove("fade");
+         singleView.classList.add("hide");
+         singleView.classList.remove("fade");
+         browseView.classList.add("fadeIn");
+         browseView.classList.remove("hide");
+         setTimeout(function(){
+            browseView.classList.remove("fadeIn");
+         }, 500);
+      }, 300);
       closeButton.classList.add("hide");
       playlistButton.classList.remove("hide");
    });
@@ -279,8 +298,16 @@ document.addEventListener("DOMContentLoaded", ()=>{
    
          //display song info
          else if(e.target && e.target.nodeName == "TD"){
-            browseView.classList.add("hide");
-            singleView.classList.remove("hide");
+            browseView.classList.add("fade");
+            setTimeout(function(){
+               browseView.classList.add("hide");
+               browseView.classList.remove("fade");
+               singleView.classList.add("fadeIn");
+               singleView.classList.remove("hide");
+               setTimeout(function(){
+                  singleView.classList.remove("fadeIn");
+               }, 500);
+            }, 300);
             playlistButton.classList.add("hide");
             closeButton.classList.remove("hide");
    

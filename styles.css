@@ -76,6 +76,7 @@ header b:hover{
     padding: 10px;
     width: 315px;
     z-index: 100;
+    animation: slideInFromRight 5250ms;
 }
 .credits a:link, .credits a:visited, .credits p{
     display: block;
@@ -372,7 +373,36 @@ canvas{
     padding-top: 20px;
 }
 
-
 .hide{
     display: none;
+}
+.fade{
+    animation: fade 300ms;
+}
+.fadeIn{
+    animation: fade 500ms;
+    animation-direction: reverse;
+}
+
+@keyframes slideInFromRight {
+    0%{
+        right: -400px;
+    }
+    20%{
+        right: 3px;
+    }
+    85%{
+        right: 3px;
+    }
+    100%{
+        right: -400px;
+    }
+}
+@keyframes fade{
+    from{
+        opacity: 1;
+    }
+    to{
+        opacity: 0;
+    }
 }
