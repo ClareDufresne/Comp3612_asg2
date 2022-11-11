@@ -94,6 +94,8 @@ footer{
     width: 97vw;
     height: calc(100vh - 150px);
     color: var(--darkPurple);
+    display: flex;
+    justify-content: center;
 }
 
 #browseView ul{
@@ -178,7 +180,7 @@ input.year, input.popularity{
     border: 1px solid var(--lightPurple);
 }
 
-.songSearch, .playlistList, .songInfo, .radarChart{
+.songSearch, .songInfo, .radarChart{
     background-color: var(--lightest);
     width: 30vw;
     min-width: 360px;
@@ -190,7 +192,7 @@ input.year, input.popularity{
     vertical-align: middle;
     overflow: scroll;
 }
-.songSearch h1, .playlistList h1{
+.songSearch h1{
     text-align: center;
     font-weight: 900;
     font-size: 35px;
@@ -212,6 +214,8 @@ tr.labels{
     padding-top: 4px;
     background-color: var(--midPurple);
     top: -2px;
+    margin-left: 2px;
+    border-radius: 2px;
 }
 table{
     display: inline-block;
@@ -230,11 +234,50 @@ table tr{
     position: relative;
     left: -2px;
 }
+#playlistView button{
+    width: 120px;
+}
 #playlistView table, #playlistView tr{
-    width: 67vw;;
+    width: 90vw;;
 }
 td, th{
     width: 20%;
+}
+td:nth-child(6){
+    width: 6%;
+}
+#playlistView td:nth-child(6){
+    width: 10%;
+}
+#browseView td button{
+    background-color: white;
+    color: var(--midPurple);
+    border: 1px solid var(--midPurple);
+    border-radius: 50%;
+    font-size: 13px;
+}
+#browseView td button:hover{
+    background-color: var(--midPurple);
+    color: white;
+    border: 1px solid white;
+    border-radius: 50%;
+    font-size: 13px;
+    cursor: pointer;
+}
+.remove{
+    margin: 2px;
+    height: 25px;
+    max-width: 80px;
+    border: 0.5px solid var(--midPurple);
+    background-color: var(--lightest);
+    font-size: 15px;
+    color: var(--midPurple);
+}
+.remove:hover{
+    background-color: var(--midPurple);
+    color: white;
+    border: 0.5px solid white;
+    cursor: pointer;
 }
 td.info{
     width: 80%;
@@ -249,13 +292,14 @@ td.info:first-child{
     justify-content: space-between;
 }
 td.info:nth-child(2){
-    width: 10%;
+    width: 8%;
 }
 
 .stripe{
     width: 100%;
     min-height: 25px;
     text-align: center;
+    margin-left: 2px;
 }
 .stripe ul{
     display: flex;
@@ -265,6 +309,10 @@ td.info:nth-child(2){
 }
 .darkStripe{
     background-color: var(--lightPurple);
+}
+.stripe:hover{
+    cursor: pointer;
+    color: var(--midPurple);
 }
 
 
@@ -276,43 +324,7 @@ td.info:nth-child(2){
     justify-content: center;
 }
 
-.playlistList{
-    padding-left: 0;
-    padding-right: 40px;
-    width: 20vw;
-    min-width: 0;
-    background-color: var(--lightPurple);
-    border: 1px solid var(--buttonPurple);
-    margin: 0 30px;
-}
-.playlistList h1{
-    width: calc(100% - 2px);
-    background-color: var(--lightPurple);
-    padding: 10px 20px;
-    position: sticky;
-    margin-top: -20px;
-    margin-bottom: -10px;
-    top: -20px;
-    border-bottom: 1px solid var(--buttonPurple);
-}
-.playlistList ul{
-    list-style: none;
-    font-size: 20px;
-}
-.playlistList li{
-    padding: 5px;
-    text-align: center;
-}
-.playlistList li:hover{
-    color: var(--midPurple);
-    cursor: pointer;
-}
 
-
-#singleView{
-    display: flex;
-    justify-content: center;
-}
 .songInfo{
     width: 30%;
     margin: 0 15px;
@@ -347,8 +359,5 @@ canvas{
 
 
 .hide{
-    display: none;
-}
-#singleView.hide{
     display: none;
 }

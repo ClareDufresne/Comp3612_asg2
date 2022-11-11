@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="styles.css">
     <script src="artists.json"></script>
     <script src="genres.json"></script>
+    <script src="sample-songs.json"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js" integrity="sha512-ElRFoEQdI5Ht6kZvyzXhYG9NqjtkmlkfYk0wr6wHxU9JEHakS7UJZNeml5ALk+8IKlU6jDgMabC3vkumRokgJA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="assign2.js"></script>
 </head>
@@ -15,7 +16,8 @@
     <header>
         <b>My Music</b>
         <button class="bigButton" id="credits">Credits</button>
-        <button class="bigButton">Close</button>
+        <button class="bigButton" id="playlist">Playlist</button>
+        <button class="bigButton hide" id="close">Close</button>
     </header>
 
     <div class="credits hide">
@@ -29,9 +31,9 @@
             <h1>Song Search</h1>
             <div class="songSearchSection">
                 <ul>
-                    <li><button class="radio Title"></button><label>Title</label><input type="text" class = "Title" disabled></li>
-                    <li><button class="radio Artist"></button><label for="artist">Artist</label><select class="Artist" disabled></select></li>
-                    <li><button class="radio Genre"></button><label for="genre">Genre</label><select class = "Genre" disabled></select></li>
+                    <li><button class="radio title"></button><label>Title</label><input type="text" class = "title" disabled></li>
+                    <li><button class="radio artist"></button><label for="artist">Artist</label><select class="artist" disabled></select></li>
+                    <li><button class="radio genre"></button><label for="genre">Genre</label><select class = "genre" disabled></select></li>
                 </ul>
             </div>
             <div id="year" class="songSearchSection">
@@ -52,7 +54,7 @@
             </div>
             <div class="buttonContainer">
                 <button class="bigButton" id="clear">Clear</button>
-                <button class="bigButton">Search</button>
+                <button class="bigButton" id="search">Search</button>
             </div>
         </div>
         <table>
@@ -62,36 +64,12 @@
                 <th>Year</th>
                 <th>Genre</th>
                 <th>Popularity</th>
+                <td></td>
             </tr>
-            <tr class="stripe">
-                <td>Happiness</td>
-                <td>The 1975</td>
-                <td>2022</td>
-                <td>Indie</td>
-                <td>75</td>
-            </tr>
-            <tr class="stripe darkStripe">
-                <td>Betty</td>
-                <td>Taylor Swift</td>
-                <td>2019</td>
-                <td>Pop</td>
-                <td>97</td>
-            </tr>
-            <tr class="stripe"></tr>
-            <tr class="stripe darkStripe"></tr>
-            <tr class="stripe"></tr>
-            <tr class="stripe darkStripe"></tr>
-            <tr class="stripe"></tr>
-            <tr class="stripe darkStripe"></tr>
-            <tr class="stripe"></tr>
-            <tr class="stripe darkStripe"></tr>
-            <tr class="stripe"></tr>
-            <tr class="stripe darkStripe"></tr>
-            <tr class="stripe"></tr>
         </table>
     </div>
 
-    <div id="singleView" class="viewPort">
+    <div id="singleView" class="viewPort hide">
         <div class="songInfo">
             <div class="innerSongInfo">
                 <h1>Song Info</h1>
@@ -103,7 +81,7 @@
                     <li><b>Year:</b> year</li>
                     <li><b>Duration:</b> 0:00</li>
                 </ul>
-                <h3>Analysis Data:</h3>
+                <h2>Analysis Data:</h2>
                 <ul>
                     <li><b>BMP:</b> 00</li>
                     <li><b>Energy:</b> 00</li>
@@ -121,77 +99,18 @@
         </div>
     </div>
 
-    <div id="playlistView" class="viewPort">
-        <div class="playlistList">
-            <h1>Playlists</h1>
-            <ul>
-                <li>playlist</li>
-                <li>playlist</li>
-                <li>chill playlist</li>
-                <li>happy playlist</li>
-                <li>super fun playlist</li>
-                <li>playlist</li>
-                <li>playlist</li>
-                <li>chill playlist</li>
-                <li>happy playlist</li>
-                <li>super fun playlist</li>
-                <li>playlist</li>
-                <li>playlist</li>
-                <li>chill playlist</li>
-                <li>happy playlist</li>
-                <li>super fun playlist</li>
-                <li>playlist</li>
-                <li>playlist</li>
-                <li>chill playlist</li>
-                <li>happy playlist</li>
-                <li>super fun playlist</li>
-                <li>playlist</li>
-                <li>playlist</li>
-                <li>chill playlist</li>
-                <li>happy playlist</li>
-                <li>super fun playlist</li>
-                <li>playlist</li>
-                <li>playlist</li>
-                <li>chill playlist</li>
-                <li>happy playlist</li>
-                <li>super fun playlist</li>
-            </ul>
-        </div>
+    <div id="playlistView" class="viewPort hide">
         <table>
-            <td class="info"><h1>Playlist Name</h1> <p>Songs: 00 Popularity: 00</p></td>
-            <td class="info"><button class="bigButton">Delete</button></td>
+            <td class="info"><h1>My Playlist</h1> <p>Songs: 00 Popularity: 00</p></td>
+            <td class="info"><button class="bigButton">Clear Playlist</button></td>
             <tr class="labels">
                 <th>Title</th>
                 <th>Artist</th>
                 <th>Year</th>
                 <th>Genre</th>
                 <th>Popularity</th>
+                <td></td>
             </tr>
-            <tr class="stripe">
-                <td>Happiness</td>
-                <td>The 1975</td>
-                <td>2022</td>
-                <td>Indie</td>
-                <td>75</td>
-            </tr>
-            <tr class="stripe darkStripe">
-                <td>Betty</td>
-                <td>Taylor Swift</td>
-                <td>2019</td>
-                <td>Pop</td>
-                <td>97</td>
-            </tr>
-            <tr class="stripe"></tr>
-            <tr class="stripe darkStripe"></tr>
-            <tr class="stripe"></tr>
-            <tr class="stripe darkStripe"></tr>
-            <tr class="stripe"></tr>
-            <tr class="stripe darkStripe"></tr>
-            <tr class="stripe"></tr>
-            <tr class="stripe darkStripe"></tr>
-            <tr class="stripe"></tr>
-            <tr class="stripe darkStripe"></tr>
-            <tr class="stripe"></tr>
         </table>
     </div>
 
