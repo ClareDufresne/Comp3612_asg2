@@ -100,7 +100,7 @@ const Songs = `
 		},
 		"analytics": {
 			"energy": 60,
-			"danceability": 66,
+			"danceability": 100,
 			"liveness": 36,
 			"valence": 29,
 			"acousticness": 5,

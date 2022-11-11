@@ -10,9 +10,10 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
    //populate table
    let songTable = document.querySelector("#browseView table");
-   populateSongs(songs, songTable);
+   let playlistTable = document.querySelector("#playlistView table");
+   populateSongs(songs, songTable, "add");
 
-   function populateSongs(songs, table){
+   function populateSongs(songs, table, buttonType){
       let counter = 0;
       table.innerHTML = "";
 
@@ -69,7 +70,13 @@ document.addEventListener("DOMContentLoaded", ()=>{
          let td5 = document.createElement("td");
          let button = document.createElement("button");
          button.dataset['song_id'] = song.song_id;
-         button.innerText = "+";
+         if(buttonType == "add"){
+            button.innerText = "+";
+         }
+         else{
+            button.innerText = "Remove";
+            button.className = "remove";
+         }
          td5.appendChild(button);
          row.appendChild(td5);
    
@@ -165,7 +172,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
          }
       }
 
-      populateSongs(matchedSongs, songTable);
+      populateSongs(matchedSongs, songTable, "add");
    });
 
 
@@ -192,6 +199,9 @@ document.addEventListener("DOMContentLoaded", ()=>{
       playlistView.classList.remove("hide");
       playlistButton.classList.add("hide");
       closeButton.classList.remove("hide");
+
+      //populate playlist 
+      populateSongs(playlist, playlistTable, "remove");
    });
 
    closeButton.addEventListener("click", function(){
@@ -245,35 +255,92 @@ document.addEventListener("DOMContentLoaded", ()=>{
       }
    });
 
+   const tables = document.querySelectorAll("table");
    const playlist = [];
+   const infoBlock = document.querySelector(".songInfo ul");
+   const analysisDivs = document.querySelectorAll("#analysis div");
+   const analysisText = document.querySelectorAll("#analysis p");
 
-   songTable.addEventListener("click", function(e){
-      //add song to playlist
-      if(e.target && e.target.nodeName == "BUTTON"){
-         let song = songs.find(d => d.song_id == e.target.dataset.song_id);
-         if(playlist.find(d => d == song) == undefined){
-            playlist.push(song);
-            console.log(playlist);
+   for(table of tables){
+      table.addEventListener("click", function(e){
+         if(e.target && e.target.nodeName == "BUTTON"){
+            let song = songs.find(d => d.song_id == e.target.dataset.song_id);
+   
+            //remove song from playlist and immediantly update
+            if(e.target.className == "remove"){
+               playlist.splice(playlist.indexOf(playlist.find(d => d == song)), 1);
+               populateSongs(playlist, playlistTable, "remove");
+            }
+            //add song to playlist
+            else if(playlist.find(d => d == song) == undefined){
+               playlist.push(song);
+            }
          }
-      }
-
-      //display song info
-      else if(e.target && e.target.nodeName == "TD"){
-         browseView.classList.add("hide");
-         singleView.classList.remove("hide");
-         playlistButton.classList.add("hide");
-         closeButton.classList.remove("hide");
-
-         let song = songs.find(d => d.song_id == e.target.dataset.song_id);
-
-         myChart.data.datasets[0].data[0] = song.analytics.danceability;
-         myChart.data.datasets[0].data[1] = song.analytics.liveness;
-         myChart.data.datasets[0].data[2] = song.analytics.valence;
-         myChart.data.datasets[0].data[3] = song.analytics.acousticness;
-         myChart.data.datasets[0].data[4] = song.analytics.speechiness;
-         myChart.update();
-      }
-   });
+   
+         //display song info
+         else if(e.target && e.target.nodeName == "TD"){
+            browseView.classList.add("hide");
+            singleView.classList.remove("hide");
+            playlistButton.classList.add("hide");
+            closeButton.classList.remove("hide");
+   
+            let song = songs.find(d => d.song_id == e.target.dataset.song_id);
+   
+            myChart.data.datasets[0].data[0] = song.analytics.danceability;
+            myChart.data.datasets[0].data[1] = song.analytics.liveness;
+            myChart.data.datasets[0].data[2] = song.analytics.valence;
+            myChart.data.datasets[0].data[3] = song.analytics.acousticness;
+            myChart.data.datasets[0].data[4] = song.analytics.speechiness;
+            myChart.update();
+   
+            infoBlock.innerText = "";
+            let li = document.createElement("li");
+            li.innerText = `Title: ${song.title}`;
+            infoBlock.appendChild(li);
+            let li2 = document.createElement("li");
+            li2.innerText = `Artist: ${song.artist.name}`;
+            infoBlock.appendChild(li2);
+            let li3 = document.createElement("li");
+            li3.innerText = `Type: ${artists.find(d => d.id == song.artist.id).type}`;
+            infoBlock.appendChild(li3);
+            let li4 = document.createElement("li");
+            li4.innerText = `Genre: ${song.genre.name}`;
+            infoBlock.appendChild(li4);
+            let li5 = document.createElement("li");
+            li5.innerText = `Year: ${song.year}`;
+            infoBlock.appendChild(li5);
+            let li6 = document.createElement("li");
+            let minutes = song.details.duration/60;
+            minutes = minutes.toFixed(0);
+            let seconds = song.details.duration%60;
+            if(seconds >= 10)
+               li6.innerText = `Duration: ${minutes}:${seconds}`;
+            else
+               li6.innerText = `Duration: ${minutes}:0${seconds}`;
+            infoBlock.appendChild(li6);
+   
+            let range = 1.8;
+            let minWidth = 110;
+   
+            analysisText[0].textContent = song.details.bpm;
+            analysisDivs[0].style.width = `${song.details.bpm/2.5 + minWidth}px`;
+            analysisText[1].textContent = song.analytics.energy;
+            analysisDivs[1].style.width = `${song.analytics.energy*range + minWidth}px`;
+            analysisText[2].textContent = song.analytics.danceability;
+            analysisDivs[2].style.width = `${song.analytics.danceability*range + minWidth}px`;
+            analysisText[3].textContent = song.analytics.liveness;
+            analysisDivs[3].style.width = `${song.analytics.liveness*range + minWidth}px`;
+            analysisText[4].textContent = song.analytics.valence;
+            analysisDivs[4].style.width = `${song.analytics.valence*range + minWidth}px`;
+            analysisText[5].textContent = song.analytics.acousticness;
+            analysisDivs[5].style.width = `${song.analytics.acousticness*range + minWidth}px`;
+            analysisText[6].textContent = song.analytics.speechiness;
+            analysisDivs[6].style.width = `${song.analytics.speechiness*range + minWidth}px`;
+            analysisText[7].textContent = song.details.popularity;
+            analysisDivs[7].style.width = `${song.details.popularity*range + minWidth}px`;
+         }
+      });
+   }
 })
 
 

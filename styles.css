@@ -342,6 +342,21 @@ td.info:nth-child(2){
 .songInfo ul{
     list-style: none;
     text-align: left;
+    font-weight: bold;
+}
+#analysis li{
+    display: flex;
+    margin: -23px 0;
+    align-items: center;
+    color: var(--midPurple);
+}
+.songInfo ul div{
+    background-color: var(--buttonPurple);
+    padding: 3px;
+    min-width: 110px;
+    max-width: 280px;
+    margin-right: 3px;
+    color: white;
 }
 .radarChart{
     width: 55%;
