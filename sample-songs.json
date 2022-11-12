@@ -5,7 +5,7 @@ const Songs = `
 		"year": 2016,
 		"artist": {
 			"id": 9,
-			"name": "Anne-Marie"
+			"name": "Aznne-Marie"
 		},
 		"genre": {
 			"id": 110,

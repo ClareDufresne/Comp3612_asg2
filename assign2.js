@@ -8,6 +8,8 @@ document.addEventListener("DOMContentLoaded", ()=>{
    //**************************************************************************************************
    let songs = JSON.parse(Songs);
 
+   let sortSelect = 0;
+
    //populate table
    let songTable = document.querySelector("#browseView table");
    let playlistTable = document.querySelector("#playlistView table");
@@ -21,20 +23,39 @@ document.addEventListener("DOMContentLoaded", ()=>{
       labelRow.className = "labels";
       let d = document.createElement("th");
       d.innerText = "Title";
+      if(sortSelect == 0 && buttonType == "add")
+         d.className = "sort";
       labelRow.appendChild(d);
       let d1 = document.createElement("th");
       d1.innerText = "Artist";
+      if(sortSelect == 1 && buttonType == "add")
+         d1.className = "sort";
       labelRow.appendChild(d1);
       let d2 = document.createElement("th");
       d2.innerText = "Year";
+      if(sortSelect == 2 && buttonType == "add")
+         d2.className = "sort";
       labelRow.appendChild(d2);
       let d3 = document.createElement("th");
       d3.innerText = "Genre";
+      if(sortSelect == 3 && buttonType == "add")
+         d3.className = "sort";
       labelRow.appendChild(d3);
       let d4 = document.createElement("th");
       d4.innerText = "Popularity";
+      if(sortSelect == 4 && buttonType == "add")
+         d4.className = "sort";
       labelRow.appendChild(d4);
       let d5 = document.createElement("td");
+      if(buttonType == "remove"){
+         let p = document.createElement("p");
+         p.innerText = `Songs: ${playlist.length} Popularity: ${getAvgPopularity()}`;
+         d5.appendChild(p);
+         let button = document.createElement("button");
+         button.innerText = "Clear"
+         button.className = "clear";
+         d5.appendChild(button);
+      }
       labelRow.appendChild(d5);
       
       table.appendChild(labelRow);
@@ -102,8 +123,10 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
    //toggle disable when radio buttons are clicked
    let buttonSection = document.querySelector(".songSearch");
+   let radioButtons = document.querySelectorAll(".radio");
+
    buttonSection.addEventListener("click", function(e){
-      if(e.target.classList[0] == 'radio'){
+      if(e.target.classList[0] == 'radio' && e.target.classList.length < 3){
          e.target.classList.toggle("selected");
          //find inputs with same classname
          let inputs = document.querySelectorAll(`.${e.target.classList[1]}`);
@@ -111,11 +134,22 @@ document.addEventListener("DOMContentLoaded", ()=>{
             if(input.classList[0] != 'radio')
                input.toggleAttribute('disabled');
          }
+
+         //turn off other radio buttons
+         for (radio of radioButtons){
+            if(radio != e.target){
+               radio.classList.remove("selected");
+               let inputs = document.querySelectorAll(`.${radio.classList[1]}`);
+               for(input of inputs){
+               if(input.classList[0] != 'radio')
+                  input.setAttribute('disabled', "");
+               }
+            }
+         }
       }
    });
 
    let clearButton = document.querySelector("#clear");
-   let radioButtons = document.querySelectorAll(".radio");
 
    clearButton.addEventListener("click", function(){
       for(button of radioButtons){
@@ -130,6 +164,9 @@ document.addEventListener("DOMContentLoaded", ()=>{
             }
          }
       }
+      populateSongs(songs, songTable, "add");
+      radioButtons[0].classList.toggle("selected");
+      document.querySelector("input.title").toggleAttribute("disabled");
    });
 
    //filter search results
@@ -153,12 +190,12 @@ document.addEventListener("DOMContentLoaded", ()=>{
                   range[0].value = 100;
                if(range[1].value == "")
                   range[1].value = 0; 
-               matchedSongs = matchedSongs.filter(d => d.details.popularity >= range[1].value && d.details.popularity <= range[0].value);
+               matchedSongs = matchedSongs.filter(d => d.details.popularity >= range[1].value && d.details.popularity < range[0].value);
             }
             else{
                if(searchTerm == "title"){
                   let searchValue = document.querySelector(`input.${searchTerm}`).value;
-                  matchedSongs = matchedSongs.filter(d => d.title == searchValue);
+                  matchedSongs = matchedSongs.filter(d => d.title.toLowerCase().includes(searchValue.toLowerCase()));
                }
                else if(searchTerm == "genre"){
                   let searchValue = document.querySelector(`select.${searchTerm}`).value;
@@ -174,7 +211,6 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
       populateSongs(matchedSongs, songTable, "add");
    });
-
 
    //display credits for 5 seconds when hovered over
    let credits = document.querySelector("#credits");
@@ -203,7 +239,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
          playlistView.classList.remove("hide");
          setTimeout(function(){
             playlistView.classList.remove("fadeIn");
-         }, 500);
+         }, 400);
       }, 300);
       playlistButton.classList.add("hide");
       closeButton.classList.remove("hide");
@@ -225,13 +261,14 @@ document.addEventListener("DOMContentLoaded", ()=>{
          browseView.classList.remove("hide");
          setTimeout(function(){
             browseView.classList.remove("fadeIn");
-         }, 500);
+         }, 400);
       }, 300);
       closeButton.classList.add("hide");
       playlistButton.classList.remove("hide");
    });
 
    //radar chart
+   //base code from https://www.chartjs.org/docs/latest/samples/other-charts/radar.html
    const ctx = document.getElementById('radar').getContext('2d');
    const chartData = {
       labels: [
@@ -290,6 +327,10 @@ document.addEventListener("DOMContentLoaded", ()=>{
                playlist.splice(playlist.indexOf(playlist.find(d => d == song)), 1);
                populateSongs(playlist, playlistTable, "remove");
             }
+            else if(e.target.className == "clear"){
+               playlist.splice(0, playlist.length);
+               populateSongs(playlist, playlistTable, "remove");
+            }
             //add song to playlist
             else if(playlist.find(d => d == song) == undefined){
                playlist.push(song);
@@ -299,14 +340,17 @@ document.addEventListener("DOMContentLoaded", ()=>{
          //display song info
          else if(e.target && e.target.nodeName == "TD"){
             browseView.classList.add("fade");
+            playlistView.classList.add("fade");
             setTimeout(function(){
                browseView.classList.add("hide");
+               playlistView.classList.add("hide");
                browseView.classList.remove("fade");
+               playlistView.classList.remove("fade");
                singleView.classList.add("fadeIn");
                singleView.classList.remove("hide");
                setTimeout(function(){
                   singleView.classList.remove("fadeIn");
-               }, 500);
+               }, 400);
             }, 300);
             playlistButton.classList.add("hide");
             closeButton.classList.remove("hide");
@@ -350,7 +394,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
             let minWidth = 110;
    
             analysisText[0].textContent = song.details.bpm;
-            analysisDivs[0].style.width = `${song.details.bpm/2.5 + minWidth}px`;
+            analysisDivs[0].style.width = `${song.details.bpm*0.6 + minWidth}px`;
             analysisText[1].textContent = song.analytics.energy;
             analysisDivs[1].style.width = `${song.analytics.energy*range + minWidth}px`;
             analysisText[2].textContent = song.analytics.danceability;
@@ -368,6 +412,71 @@ document.addEventListener("DOMContentLoaded", ()=>{
          }
       });
    }
+
+   songTable.addEventListener("click", function(e){
+      //sort songs
+      if(e.target && e.target.nodeName == "TH"){
+         if(document.querySelector(".sort"))
+            document.querySelector(".sort").classList.toggle("sort");
+         let sortTerm;
+
+         if(e.target.innerText == "Title" || e.target.innerText == "Year"){
+            sortSelect = 0;
+            if(e.target.innerText == "Year")
+               sortSelect = 2;
+            sortTerm = e.target.innerText.toLowerCase();
+            songs.sort(function(a, b){
+               if(a[sortTerm] < b[sortTerm])
+                  return -1;
+               if(a[sortTerm] > b[sortTerm])
+                  return 1;
+               return 0;
+            });
+         }
+         else if(e.target.innerText == "Popularity"){
+            sortSelect = 4;
+            songs.sort(function(a, b){
+               if(a.details.popularity < b.details.popularity)
+                  return 1;
+               if(a.details.popularity > b.details.popularity)
+                  return -1;
+               return 0;
+            });
+         }
+         else if(e.target.innerText == "Genre"){
+            sortSelect = 3;
+            songs.sort(function(a, b){
+               if(a.genre.name < b.genre.name)
+                  return -1;
+               if(a.genre.name > b.genre.name)
+                  return 1;
+               return 0;
+            });
+         }
+         else{
+            sortSelect = 1;
+            songs.sort(function(a, b){
+               if(a.artist.name < b.artist.name)
+                  return -1;
+               if(a.artist.name > b.artist.name)
+                  return 1;
+               return 0;
+            });
+         }
+         
+         populateSongs(songs, songTable, "add");
+      }
+   })
+
+   function getAvgPopularity(){
+      let avg = 0;
+      for(song of playlist){
+         avg += song.details.popularity;
+      }
+      if(playlist.length == 0)
+         return 0;
+      return avg/playlist.length.toFixed(1);
+   };
 })
 
 

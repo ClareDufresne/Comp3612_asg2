@@ -241,8 +241,33 @@ table tr{
 #playlistView table, #playlistView tr{
     width: 90vw;;
 }
+#playlistView table p{
+    width: 300px;
+    text-align: right;
+    position: absolute;
+    top: -40px;
+    right: 5px;
+}
 td, th{
     width: 20%;
+}
+th{
+    background-repeat: no-repeat;
+    background-size: 18px;
+}
+#playlistView th{
+    background-position: 180px 2px;
+}
+#browseView th{
+    background-position: 150px 2px;
+}
+th:hover{
+    background-image: url("./images/triangle.png");
+    color: var(--lightPurple);
+    cursor: pointer;
+}
+.sort{
+    background-image: url("./images/triangle.png");
 }
 td:nth-child(6){
     width: 6%;
@@ -274,11 +299,27 @@ td:nth-child(6){
     font-size: 15px;
     color: var(--midPurple);
 }
+.clear{
+    position: absolute;
+    top: 0;
+    right: -1px;
+    height: 29px;
+    max-width: 80px;
+    font-size: 19px;
+    color: var(--lightest);
+    background-color: var(--buttonPurple);
+    border: 0;
+    border-radius: 3px;
+}
 .remove:hover{
     background-color: var(--midPurple);
     color: white;
     border: 0.5px solid white;
     cursor: pointer;
+}
+.clear:hover{
+    cursor: pointer;
+    background-color: rgb(216, 184, 247);
 }
 td.info{
     width: 80%;
