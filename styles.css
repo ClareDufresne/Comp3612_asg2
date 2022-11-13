@@ -227,6 +227,7 @@ table{
     padding: 0;
     vertical-align: middle;
     border-radius: 3px;
+    overflow-y: scroll;
 }
 table tr{
     width: calc(60vw + 40px);
@@ -241,12 +242,12 @@ table tr{
 #playlistView table, #playlistView tr{
     width: 90vw;;
 }
-#playlistView table p{
+#playlistView p{
     width: 300px;
     text-align: right;
     position: absolute;
-    top: -40px;
-    right: 5px;
+    right: 80px;
+    top: 65px;
 }
 td, th{
     width: 20%;
@@ -261,7 +262,7 @@ th{
 #browseView th{
     background-position: 150px 2px;
 }
-th:hover{
+#browseView th:hover{
     background-image: url("./images/triangle.png");
     color: var(--lightPurple);
     cursor: pointer;
@@ -412,6 +413,21 @@ td.info:nth-child(2){
 }
 canvas{
     padding-top: 20px;
+}
+
+#addToPlaylistConfirm{
+    position: absolute;
+    z-index: 100;
+    left: 57vw;
+    top: 50vh;
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+    background-color: var(--midPurple);
+    border: 1px solid var(--buttonPurple);
+    box-shadow: var(--shadow);
+    padding: 10px;
+    border-radius: 5px;
 }
 
 .hide{

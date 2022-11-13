@@ -1,18 +1,46 @@
 document.addEventListener("DOMContentLoaded", ()=>{
-   let artists = JSON.parse(Artists);
-   let genres = JSON.parse(Genres);
+   let songs = localStorage.getItem('songs');
+   let artists = localStorage.getItem('artists');
+   let genres = localStorage.getItem('genres');
 
-   //replace this with api fetch *******************************************************************
-   //**************************************************************************************************
-   //**************************************************************************************************
-   //**************************************************************************************************
-   let songs = JSON.parse(Songs);
+   if(songs == null){
+      fetch('http://www.randyconnolly.com/funwebdev/3rd/api/music/songs-nested.php')
+      .then(response => {return response.json()})
+      .then(data=>{
+      localStorage.setItem('songs', JSON.stringify(data)); 
+      songs = data;
+      console.log("Data had to be requested");
+      })
+   }
+   songs = JSON.parse(songs);
+   let matchedSongs = songs;
 
-   let sortSelect = 0;
+   if(artists == null){
+      fetch('artists.json')
+      .then(response => {return response.json()})
+      .then(data=>{
+      localStorage.setItem('artists', JSON.stringify(data)); 
+      artists = data;
+      })
+   }
+   artists = JSON.parse(artists);
+
+   if(genres == null){
+      fetch('genres.json')
+      .then(response => {return response.json()})
+      .then(data=>{
+      localStorage.setItem('genres', JSON.stringify(data)); 
+      genres = data;
+      })
+   }
+   genres = JSON.parse(genres);
+
 
    //populate table
    let songTable = document.querySelector("#browseView table");
    let playlistTable = document.querySelector("#playlistView table");
+   let playlistInfo = document.querySelector("#playlistView p");
+   let sortSelect = 0;     //indicates which column is to be sorted
    populateSongs(songs, songTable, "add");
 
    function populateSongs(songs, table, buttonType){
@@ -48,9 +76,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
       labelRow.appendChild(d4);
       let d5 = document.createElement("td");
       if(buttonType == "remove"){
-         let p = document.createElement("p");
-         p.innerText = `Songs: ${playlist.length} Popularity: ${getAvgPopularity()}`;
-         d5.appendChild(p);
+         playlistInfo.innerText = `Songs: ${playlist.length} Popularity: ${getAvgPopularity().toFixed(1)}`;
          let button = document.createElement("button");
          button.innerText = "Clear"
          button.className = "clear";
@@ -106,7 +132,20 @@ document.addEventListener("DOMContentLoaded", ()=>{
       }
    }
 
+
+   //get average popularity of the songs in the playlist
+   function getAvgPopularity(){
+      let avg = 0;
+      for(song of playlist){
+         avg += song.details.popularity;
+      }
+      if(playlist.length == 0)
+         return 0;
+      return avg/playlist.length.toFixed(1);
+   };
+
    
+   //populate artist and genre select elements
    let artistSelector = document.querySelector("select.artist");
    let genreSelector = document.querySelector("select.genre");
 
@@ -121,7 +160,8 @@ document.addEventListener("DOMContentLoaded", ()=>{
       genreSelector.appendChild(option);
    }
 
-   //toggle disable when radio buttons are clicked
+
+   //handle radio buttons and search input fields
    let buttonSection = document.querySelector(".songSearch");
    let radioButtons = document.querySelectorAll(".radio");
 
@@ -149,8 +189,9 @@ document.addEventListener("DOMContentLoaded", ()=>{
       }
    });
 
-   let clearButton = document.querySelector("#clear");
 
+   //clear search filters
+   let clearButton = document.querySelector("#clear");
    clearButton.addEventListener("click", function(){
       for(button of radioButtons){
          if(button.classList.contains('selected')){
@@ -165,14 +206,16 @@ document.addEventListener("DOMContentLoaded", ()=>{
          }
       }
       populateSongs(songs, songTable, "add");
+      matchedSongs = songs;
       radioButtons[0].classList.toggle("selected");
       document.querySelector("input.title").toggleAttribute("disabled");
    });
 
+
    //filter search results
    let searchButton = document.querySelector('#search');
    searchButton.addEventListener("click", function(){
-      let matchedSongs = songs;
+      matchedSongs = songs;
       for(button of radioButtons){
          if(button.classList.contains('selected')){
             let searchTerm = button.classList[1];
@@ -190,12 +233,12 @@ document.addEventListener("DOMContentLoaded", ()=>{
                   range[0].value = 100;
                if(range[1].value == "")
                   range[1].value = 0; 
-               matchedSongs = matchedSongs.filter(d => d.details.popularity >= range[1].value && d.details.popularity < range[0].value);
+               matchedSongs = matchedSongs.filter(d => d.details.popularity > range[1].value && d.details.popularity < range[0].value);
             }
             else{
                if(searchTerm == "title"){
                   let searchValue = document.querySelector(`input.${searchTerm}`).value;
-                  matchedSongs = matchedSongs.filter(d => d.title.toLowerCase().includes(searchValue.toLowerCase()));
+                  matchedSongs = matchedSongs.filter(d => d.title.toString().toLowerCase().includes(searchValue.toLowerCase()));
                }
                else if(searchTerm == "genre"){
                   let searchValue = document.querySelector(`select.${searchTerm}`).value;
@@ -212,6 +255,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
       populateSongs(matchedSongs, songTable, "add");
    });
 
+
    //display credits for 5 seconds when hovered over
    let credits = document.querySelector("#credits");
    let creditInfo = document.querySelector(".credits");
@@ -221,6 +265,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
          creditInfo.classList.add("hide");
       }, 5000);
    });
+
 
    //switch viewports
    let closeButton = document.querySelector("#close");
@@ -267,6 +312,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
       playlistButton.classList.remove("hide");
    });
 
+
    //radar chart
    //base code from https://www.chartjs.org/docs/latest/samples/other-charts/radar.html
    const ctx = document.getElementById('radar').getContext('2d');
@@ -311,34 +357,49 @@ document.addEventListener("DOMContentLoaded", ()=>{
       }
    });
 
+
    const tables = document.querySelectorAll("table");
-   const playlist = [];
+   const playlist = [];    //will hold all songs that have been added to the playlist
    const infoBlock = document.querySelector(".songInfo ul");
    const analysisDivs = document.querySelectorAll("#analysis div");
    const analysisText = document.querySelectorAll("#analysis p");
+   const playlistPopup = document.querySelector("#addToPlaylistConfirm");
 
    for(table of tables){
       table.addEventListener("click", function(e){
          if(e.target && e.target.nodeName == "BUTTON"){
             let song = songs.find(d => d.song_id == e.target.dataset.song_id);
    
-            //remove song from playlist and immediantly update
+            //remove song from playlist
             if(e.target.className == "remove"){
                playlist.splice(playlist.indexOf(playlist.find(d => d == song)), 1);
                populateSongs(playlist, playlistTable, "remove");
             }
+            //clear all songs from playlist
             else if(e.target.className == "clear"){
                playlist.splice(0, playlist.length);
                populateSongs(playlist, playlistTable, "remove");
             }
-            //add song to playlist
+            //add song to playlist if it has not already been added
             else if(playlist.find(d => d == song) == undefined){
                playlist.push(song);
+
+               //added to playlist popup
+               playlistPopup.classList.remove("hide");
+               setTimeout(function(){
+                  playlistPopup.classList.add("fade");
+                  setTimeout(function(){
+                     playlistPopup.classList.add("hide");
+                     playlistPopup.classList.remove("fade");
+                  }, 300);
+               }, 800);
             }
          }
    
-         //display song info
+
+         //display song info when it is clicked
          else if(e.target && e.target.nodeName == "TD"){
+            //switch viewport
             browseView.classList.add("fade");
             playlistView.classList.add("fade");
             setTimeout(function(){
@@ -355,8 +416,10 @@ document.addEventListener("DOMContentLoaded", ()=>{
             playlistButton.classList.add("hide");
             closeButton.classList.remove("hide");
    
+
             let song = songs.find(d => d.song_id == e.target.dataset.song_id);
    
+            //add song analytics to chart
             myChart.data.datasets[0].data[0] = song.analytics.danceability;
             myChart.data.datasets[0].data[1] = song.analytics.liveness;
             myChart.data.datasets[0].data[2] = song.analytics.valence;
@@ -364,6 +427,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
             myChart.data.datasets[0].data[4] = song.analytics.speechiness;
             myChart.update();
    
+            //display song info
             infoBlock.innerText = "";
             let li = document.createElement("li");
             li.innerText = `Title: ${song.title}`;
@@ -390,9 +454,10 @@ document.addEventListener("DOMContentLoaded", ()=>{
                li6.innerText = `Duration: ${minutes}:0${seconds}`;
             infoBlock.appendChild(li6);
    
-            let range = 1.8;
-            let minWidth = 110;
+            let minWidth = 110;  //of the analysis divs
+            let range = 1.8;     //control maximum width of the analysis divs
    
+            //display song analysis data, sizing divs according to the data
             analysisText[0].textContent = song.details.bpm;
             analysisDivs[0].style.width = `${song.details.bpm*0.6 + minWidth}px`;
             analysisText[1].textContent = song.analytics.energy;
@@ -413,19 +478,21 @@ document.addEventListener("DOMContentLoaded", ()=>{
       });
    }
 
+
+   //when a table header label is clicked, sort the table by that label
    songTable.addEventListener("click", function(e){
-      //sort songs
       if(e.target && e.target.nodeName == "TH"){
          if(document.querySelector(".sort"))
             document.querySelector(".sort").classList.toggle("sort");
          let sortTerm;
 
+         //titles will be sorted alphabetically, and years from oldest to newest
          if(e.target.innerText == "Title" || e.target.innerText == "Year"){
             sortSelect = 0;
             if(e.target.innerText == "Year")
                sortSelect = 2;
             sortTerm = e.target.innerText.toLowerCase();
-            songs.sort(function(a, b){
+            matchedSongs.sort(function(a, b){
                if(a[sortTerm] < b[sortTerm])
                   return -1;
                if(a[sortTerm] > b[sortTerm])
@@ -433,9 +500,10 @@ document.addEventListener("DOMContentLoaded", ()=>{
                return 0;
             });
          }
+         //sorted from most to least popular
          else if(e.target.innerText == "Popularity"){
             sortSelect = 4;
-            songs.sort(function(a, b){
+            matchedSongs.sort(function(a, b){
                if(a.details.popularity < b.details.popularity)
                   return 1;
                if(a.details.popularity > b.details.popularity)
@@ -443,9 +511,10 @@ document.addEventListener("DOMContentLoaded", ()=>{
                return 0;
             });
          }
+         //genres and artists will be sorted alphabetically
          else if(e.target.innerText == "Genre"){
             sortSelect = 3;
-            songs.sort(function(a, b){
+            matchedSongs.sort(function(a, b){
                if(a.genre.name < b.genre.name)
                   return -1;
                if(a.genre.name > b.genre.name)
@@ -455,7 +524,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
          }
          else{
             sortSelect = 1;
-            songs.sort(function(a, b){
+            matchedSongs.sort(function(a, b){
                if(a.artist.name < b.artist.name)
                   return -1;
                if(a.artist.name > b.artist.name)
@@ -464,19 +533,9 @@ document.addEventListener("DOMContentLoaded", ()=>{
             });
          }
          
-         populateSongs(songs, songTable, "add");
+         populateSongs(matchedSongs, songTable, "add");
       }
    })
-
-   function getAvgPopularity(){
-      let avg = 0;
-      for(song of playlist){
-         avg += song.details.popularity;
-      }
-      if(playlist.length == 0)
-         return 0;
-      return avg/playlist.length.toFixed(1);
-   };
 })
 
 
