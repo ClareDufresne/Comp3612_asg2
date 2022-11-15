@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
          artists = JSON.parse(artists);
          getGenres();
       })
+      .catch(error => console.log(error))
    }
    else{
       artists = JSON.parse(artists);
@@ -28,6 +29,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
             genres = JSON.parse(genres);
             getSongs();
          })
+         .catch(error => console.log(error))
       }
       else{
          genres = JSON.parse(genres);
@@ -46,6 +48,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
             songs = JSON.parse(songs);
             start();
          })
+         .catch(error => console.log(error))
       }
       else{
          songs = JSON.parse(songs);
