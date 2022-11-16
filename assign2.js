@@ -58,7 +58,6 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
    //put all code in function so that nothing is executed until the data from API or local storage is available
    function start(){
-      //populate table
       let songTable = document.querySelector("#browseView table");
       let playlistTable = document.querySelector("#playlistView table");
       let playlistInfo = document.querySelector("#playlistView p");
@@ -79,6 +78,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
          });
       }
 
+      //populate browseview table (buttonType will be add) or playlist table (button type will be remove)
       function populateSongs(songs, table, buttonType){
          let counter = 0;
          table.innerHTML = "";      //clear table
@@ -213,7 +213,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
                   input.toggleAttribute('disabled');
             }
 
-            //turn off other radio buttons
+            //turn off other radio buttons so that they are mutually exclusive
             for (radio of radioButtons){
                if(radio != e.target){
                   radio.classList.remove("selected");
@@ -273,20 +273,19 @@ document.addEventListener("DOMContentLoaded", ()=>{
                      range[1].value = 0; 
                   matchedSongs = matchedSongs.filter(d => d.details.popularity > range[1].value && d.details.popularity < range[0].value);
                }
-               else{
-                  if(searchTerm == "title"){
-                     let searchValue = document.querySelector(`input.${searchTerm}`).value;
-                     matchedSongs = matchedSongs.filter(d => d.title.toString().toLowerCase().includes(searchValue.toLowerCase()));
-                  }
-                  else if(searchTerm == "genre"){
-                     let searchValue = document.querySelector(`select.${searchTerm}`).value;
-                     matchedSongs = matchedSongs.filter(d => d.genre.name == searchValue);
-                  }
-                  else if(searchTerm == "artist"){
-                     let searchValue = document.querySelector(`select.${searchTerm}`).value;
-                     matchedSongs = matchedSongs.filter(d => d.artist.name == searchValue);
-                  }
+               else if(searchTerm == "title"){
+                  let searchValue = document.querySelector(`input.${searchTerm}`).value;
+                  matchedSongs = matchedSongs.filter(d => d.title.toString().toLowerCase().includes(searchValue.toLowerCase()));
                }
+               else if(searchTerm == "genre"){
+                  let searchValue = document.querySelector(`select.${searchTerm}`).value;
+                  matchedSongs = matchedSongs.filter(d => d.genre.name == searchValue);
+               }
+               else if(searchTerm == "artist"){
+                  let searchValue = document.querySelector(`select.${searchTerm}`).value;
+                  matchedSongs = matchedSongs.filter(d => d.artist.name == searchValue);
+               }
+               
             }
          }
 
@@ -398,11 +397,11 @@ document.addEventListener("DOMContentLoaded", ()=>{
 
 
       const tables = document.querySelectorAll("table");
-      const playlist = [];    //will hold all songs that have been added to the playlist
       const info_li = document.querySelectorAll("#infoBlock li");
       const analysisDivs = document.querySelectorAll("#analysis div");
       const analysisText = document.querySelectorAll("#analysis p");
       const playlistPopup = document.querySelector("#addToPlaylistConfirm");
+      const playlist = [];    //will hold all songs that have been added to the playlist
 
       for(table of tables){
          table.addEventListener("click", function(e){
@@ -486,7 +485,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
                let minWidth = 110;  //of the analysis divs
                let range = 1.8;     //control maximum width of the analysis divs
       
-               //display song analysis data, sizing divs according to the data
+               //display song analysis data, calculating div size according to the data
                analysisText[0].textContent = song.details.bpm;
                analysisDivs[0].style.width = `${song.details.bpm*0.6 + minWidth}px`;
                analysisText[1].textContent = song.analytics.energy;
@@ -535,7 +534,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
                   return 0;
                });
             }
-            //genres and artists will be sorted alphabetically
+            //genres and artist names will be sorted alphabetically
             else if(e.target.innerText == "Genre"){
                sortSelect = 3;
                matchedSongs.sort(function(a, b){
