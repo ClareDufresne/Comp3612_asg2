@@ -244,9 +244,9 @@ document.addEventListener("DOMContentLoaded", ()=>{
             }
          }
          sortSelect = 0; 
-         sortByTitle("title");
-         populateSongs(songs, songTable, "add");
          matchedSongs = songs;
+         sortByTitle("title");
+         populateSongs(matchedSongs, songTable, "add");
          radioButtons[0].classList.toggle("selected");
          document.querySelector("input.title").toggleAttribute("disabled");
       });
