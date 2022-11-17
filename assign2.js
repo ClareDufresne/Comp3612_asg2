@@ -243,6 +243,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
                }
             }
          }
+         sortSelect = 0; 
          populateSongs(songs, songTable, "add");
          matchedSongs = songs;
          radioButtons[0].classList.toggle("selected");
