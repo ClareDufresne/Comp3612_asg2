@@ -154,6 +154,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
             row.appendChild(td4);
             let td5 = document.createElement("td");
             let button = document.createElement("button");
+            td5.dataset['song_id'] = song.song_id;
             button.dataset['song_id'] = song.song_id;
             if(buttonType == "add"){
                button.innerText = "+";
